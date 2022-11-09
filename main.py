@@ -37,6 +37,10 @@ category_index = label_map_util.create_category_index_from_labelmap(ANNOTATION_P
 cap = cv2.VideoCapture("Top 10 Safety Vest For Construction For Men And Women.mp4")
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+size = (width, height)
+result = cv2.VideoWriter('output.avi', 
+                         cv2.VideoWriter_fourcc(*'MJPG'),
+                         10, size)
 while True: 
     ret, frame = cap.read()
     image_np = np.array(frame)
@@ -65,9 +69,25 @@ while True:
                 max_boxes_to_draw=5,
                 min_score_thresh=.5,
                 agnostic_mode=False)
-
-    cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
-    
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        cap.release()
+    if ret == True: 
+  
+        # Write the frame into the
+        # file 'filename.avi'
+        result.write(cv2.resize(image_np_with_detections, (800, 600)))
+  
+        # Display the frame
+        # saved in the file
+        cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
+        # cv2.imshow('Frame', frame)
+  
+        # Press S on keyboard 
+        # to stop the process
+        if cv2.waitKey(1) & 0xFF == ord('s'):
+            break
+  
+    # Break the loop
+    else:
         break
+
+    
+    
